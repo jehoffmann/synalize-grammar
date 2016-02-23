@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.14">
+    <grammar name="Qualcomm Bootimage" start="id:1" author="Jens Hoffmann" email="jehoffma@gmail.com" fileextension="mbn">
+        <description>Grammar for a Qualcomm LK Bootimage</description>
+        <structure name="Qualcomm Image" id="1" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <structref name="Header" id="3" structure="id:2"/>
+            <structref name="APPSBOOT" id="5" structure="id:4"/>
+            <structref name="Signature" id="7" structure="id:6"/>
+            <structref name="Certificate Chain" id="9" structure="id:8"/>
+        </structure>
+        <structure name="Header" id="2" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <number name="image_id" id="11" type="integer" length="4">
+                <description>5 = appsbl</description>
+            </number>
+            <number name="flash_partition_version" id="12" type="integer" length="4">
+                <description>3 = NAND</description>
+            </number>
+            <number name="image_src" id="13" fillcolor="FF40FF" type="integer" length="4">
+                <description>Image Source Pointer
+</description>
+            </number>
+            <number name="image_dst" id="14" fillcolor="FF40FF" type="integer" length="4" display="hex">
+                <description>Physical Load Address for Image</description>
+            </number>
+            <number name="image_size" id="15" type="integer" length="4">
+                <description>MBN File Size
+
+code_size + cert_chain_size + signature_size</description>
+            </number>
+            <number name="code_size" id="16" fillcolor="932092" type="integer" length="4" display="hex"/>
+            <number name="signature_ptr" id="17" fillcolor="AA7941" type="integer" length="4" display="hex"/>
+            <number name="signature_size" id="18" fillcolor="FF2600" type="integer" length="4"/>
+            <number name="cert_chain_ptr" id="19" fillcolor="AA7941" type="integer" length="4" display="hex"/>
+            <number name="cert_chain_size" id="20" fillcolor="FF2600" type="integer" length="4"/>
+        </structure>
+        <structure name="APPSBOOT" id="4" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="aboot.bin" id="22" fillcolor="00F900" length="code_size"/>
+        </structure>
+        <structure name="Signature" id="6" length="signature_size" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="00FCFF">
+            <binary name="Signature" id="24" fillcolor="FF40FF" length="remaining"/>
+        </structure>
+        <structure name="Certificate Chain" id="8" length="cert_chain_size" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="Certificate Chain" id="26" fillcolor="FF9200" length="remaining">
+                <description>Padded Certificate Chain</description>
+            </binary>
+        </structure>
+    </grammar>
+</ufwb>
