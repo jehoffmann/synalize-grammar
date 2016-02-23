@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ufwb version="1.14">
+    <grammar name="Android Bootimage" start="id:326" author="Jens Hoffmann" email="jehoffma@gmail.com" fileextension="img" uti="com.apple.disk-image-ndif" complete="yes">
+        <description>Android Bootimage grammar</description>
+        <structure name="Bootimage" id="326" length="0" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <structref name="Header" id="328" structure="id:327"/>
+            <structref name="Kernel" id="330" structure="id:329"/>
+            <structref name="Ramdisk" id="332" structure="id:331"/>
+            <structref name="Secondary Kernel" id="334" structure="id:333"/>
+            <structref name="DeviceTree" id="336" structure="id:335"/>
+        </structure>
+        <structure name="Header" id="327" length="page_size" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <string name="magic" mustmatch="yes" id="338" strokecolor="FEFFFF" type="fixed-length" length="8">
+                <fixedvalues>
+                    <fixedvalue name="android" value="ANDROID!"/>
+                </fixedvalues>
+            </string>
+            <number name="kernel_size" id="339" strokecolor="FF9200" fillcolor="FF9200" type="integer" length="4">
+                <description>Kernel size in bytes</description>
+            </number>
+            <number name="kernel_addr" id="340" strokecolor="FEFB00" fillcolor="FEFB00" type="integer" length="4" display="hex">
+                <description>Kernel physical load address</description>
+            </number>
+            <number name="ramdisk_size" id="341" strokecolor="FF9200" fillcolor="FF9200" type="integer" length="4"/>
+            <number name="ramdisk_addr" id="342" strokecolor="FEFB00" fillcolor="FEFB00" type="integer" length="4" display="hex">
+                <description>Ramdisk physical load address</description>
+            </number>
+            <number name="second_size" id="343" strokecolor="FF9200" fillcolor="FF9200" type="integer" length="4">
+                <description>Secondary kernel size in bytes</description>
+            </number>
+            <number name="second_addr" id="344" strokecolor="FEFB00" fillcolor="FEFB00" type="integer" length="4" display="hex">
+                <description>Secondary kernel physical load address</description>
+            </number>
+            <number name="tags_addr" id="345" strokecolor="FEFB00" fillcolor="FEFB00" type="integer" length="4" display="hex">
+                <description>ATAG or DeviceTree physical load address</description>
+            </number>
+            <number name="page_size" id="346" strokecolor="FF9200" fillcolor="FF9200" type="integer" length="4" display="hex">
+                <description>Boot image page size in bytes</description>
+            </number>
+            <number name="dt_size" id="347" strokecolor="FF9200" fillcolor="FF9200" type="integer" length="4">
+                <description>DeviceTree size in bytes</description>
+            </number>
+            <number name="unused" id="348" fillcolor="000000" type="integer" length="4">
+                <description>future expansion: should be 0</description>
+            </number>
+            <string name="name" id="349" strokecolor="B8EFE3" fillcolor="B8EFE3" type="fixed-length" length="16">
+                <description>asciiz product name</description>
+            </string>
+            <string name="cmdline" id="350" strokecolor="FF40FF" fillcolor="FF40FF" type="fixed-length" length="512">
+                <description>Kernel commandline</description>
+            </string>
+            <binary name="id" id="351" strokecolor="00FCFF" fillcolor="00FCFF" repeatmin="8" repeatmax="8" length="4">
+                <description>timestamp / checksum / sha1 / etc </description>
+            </binary>
+            <binary name="padding" id="352" fillcolor="000000" length="remaining"/>
+        </structure>
+        <structure name="Kernel" id="329" length="ceil(kernel_size/page_size)*page_size" encoding="ISO_8859-1:1987" endian="little" signed="no" fillcolor="00F900">
+            <binary name="Kernel Image" id="354" fillcolor="00F900" length="kernel_size"/>
+            <binary name="padding" id="355" fillcolor="000000" length="remaining"/>
+        </structure>
+        <structure name="Ramdisk" id="331" length="ceil(ramdisk_size/page_size)*page_size" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="Ramdisk Image" id="357" fillcolor="AA7941" length="ramdisk_size"/>
+            <binary name="padding" id="358" fillcolor="000000" length="remaining"/>
+        </structure>
+        <structure name="Secondary Kernel" id="333" length="ceil(second_size/page_size)*page_size" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="Secondary Image" id="360" length="second_size"/>
+            <binary name="padding" id="361" fillcolor="000000" length="remaining"/>
+        </structure>
+        <structure name="DeviceTree" id="335" length="ceil(dt_size/page_size)*page_size" encoding="ISO_8859-1:1987" endian="little" signed="no">
+            <binary name="DeviceTree Image" id="363" fillcolor="00FCFF" length="dt_size"/>
+            <binary name="padding" id="364" fillcolor="000000" length="remaining"/>
+        </structure>
+    </grammar>
+</ufwb>
